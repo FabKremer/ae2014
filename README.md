@@ -4,7 +4,7 @@
 
 Esta es la modificacion del framework [jmetal.src](http://jmetal.sourceforge.net/) para generar un algoritmo evolutivo que optimize la asignación de las materias electivas a los estudiantes de la facultad de Ingeniería. 
 
-### Como correr el algoritmo
+### Como crear un proyecto que corra el algoritmo
 
 #### Mediante Eclipse
 
@@ -12,3 +12,11 @@ Esta es la modificacion del framework [jmetal.src](http://jmetal.sourceforge.net
 * Elegir un nombre para el proyecto y darle *Next*.
 * Seleccionar *Link additional source* y buscar la carpeta donde bajaste este framework.
 * Cliquear *Finish*.
+
+### Cómo correr el algoritmo
+
+Luego de que tenemos un proyecto con el framework linkeado, debemos:
+
+* Ir al package *jmetal.metaheuristics.nsgaII*.
+* Click derecho en *NSGAII_main.java*.
+* *Run As* -> *Java Application*.
