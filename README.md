@@ -2,9 +2,9 @@
 
 ### Optimización en la asignación de materias electivas a estudiantes de la Facultad de Ingeniería
 
-Esta es la modificacion del framework [jmetal.src](http://jmetal.sourceforge.net/) para generar un algoritmo evolutivo que optimize la asignación de las materias electivas a los estudiantes de la facultad de Ingeniería. 
+Ésta es la modificacion del framework [jmetal.src](http://jmetal.sourceforge.net/) para generar un algoritmo evolutivo que optimice la asignación de las materias electivas a los estudiantes de la facultad de Ingeniería. 
 
-### Como crear un proyecto que corra el algoritmo
+### Cómo crear un proyecto que corra el algoritmo
 
 #### Mediante Eclipse
 
