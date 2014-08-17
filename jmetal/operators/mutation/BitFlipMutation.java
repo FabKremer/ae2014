@@ -92,8 +92,8 @@ public class BitFlipMutation extends Mutation {
 			else { // Integer representation
 				for (int i = 0; i < solution.getDecisionVariables().length; i++)
 					if (PseudoRandom.randDouble() < probability) {
-						int first_objetive = 0;//PseudoRandom.randInt(0,1);
-						if(first_objetive == 0){
+						int first_objetive = PseudoRandom.randInt(0,1000000);
+						if(first_objetive != 0 ){
 							//debo ir a conocer todas las materias del alumno i mod cantidad_alumnos
 							int cantidad_alumnos = solution.getDecisionVariables().length/4;
 							int alumno = i % cantidad_alumnos;
@@ -116,10 +116,37 @@ public class BitFlipMutation extends Mutation {
 								//encuentro alguna materia que tenga mejor preferencia
 								double preferencia_materia = materias_probabilidades.get(materia)[alumno];
 								double preferencia_nueva = -1;
-								if (preferencia_materia<0.7){
+								if (preferencia_materia==0.4){
 									int[] signatureCodes = ((SignatureAssignment)solution.getProblem()).getSignatureCodes_();
 									int aux;
-									while(preferencia_nueva<preferencia_materia){
+									
+									int no_mueras = signatureCodes.length * 1000;
+									//la cambio por una mas alta si puedo, si no igual
+									while(preferencia_nueva<=preferencia_materia && no_mueras>0){
+										aux = PseudoRandom.randInt(0,signatureCodes.length-1);
+										random_signature = signatureCodes[aux];
+										int mat = random_signature;
+										if ((random_signature != materia) && (!Arrays.asList(codigos_alumno).contains(mat))){
+											preferencia_nueva = materias_probabilidades.get(random_signature)[alumno];
+										}
+										no_mueras--;
+									}
+									
+									if (no_mueras ==0){
+										while(preferencia_nueva<preferencia_materia){
+											aux = PseudoRandom.randInt(0,signatureCodes.length-1);
+											random_signature = signatureCodes[aux];
+											int mat = random_signature;
+											if ((random_signature != materia) && (!Arrays.asList(codigos_alumno).contains(mat))){
+												preferencia_nueva = materias_probabilidades.get(random_signature)[alumno];
+											}
+										}
+									}
+								}else if (preferencia_materia==0.1){
+									int[] signatureCodes = ((SignatureAssignment)solution.getProblem()).getSignatureCodes_();
+									int aux;
+									//la cambio por una mas alta seguro!!
+									while(preferencia_nueva<=preferencia_materia){
 										aux = PseudoRandom.randInt(0,signatureCodes.length-1);
 										random_signature = signatureCodes[aux];
 										int mat = random_signature;
@@ -127,7 +154,7 @@ public class BitFlipMutation extends Mutation {
 											preferencia_nueva = materias_probabilidades.get(random_signature)[alumno];
 										}
 									}
-								}		
+								}
 							}else{
 								//elijo la mejor de las posibles soluciones para el alumno
 								int[] signatureCodes = ((SignatureAssignment)solution.getProblem()).getSignatureCodes_();
@@ -148,35 +175,35 @@ public class BitFlipMutation extends Mutation {
 							int materia_nueva = random_signature;
 							solution.getDecisionVariables()[i].setValue(materia_nueva);
 						}
-//						else{
-//							HashMap<Integer,Integer> cant_alumnos_por_materia = new HashMap<Integer,Integer>();
-//							int codigo_materia;
-//							for (int iterator=0; iterator< solution.getDecisionVariables().length; iterator++){
-//								codigo_materia = (int)solution.getDecisionVariables()[iterator].getValue();
-//								if(codigo_materia!=0){
-//									if(cant_alumnos_por_materia.get(codigo_materia)==null)
-//										cant_alumnos_por_materia.put(codigo_materia, 1);
-//									else
-//										cant_alumnos_por_materia.put(codigo_materia, cant_alumnos_por_materia.get(codigo_materia)+1);	
-//								}
-//							}// for
-//							
-//							int [] signatureCodes = ((SignatureAssignment)solution.getProblem()).getSignatureCodes_();
-//							int codigo_min = 0;
-//							int min = 100000;
-//							for( int key : signatureCodes){
-//								if(cant_alumnos_por_materia.get(key)== null){
-//									codigo_min = key;
-//									break;
-//								}
-//								else if(cant_alumnos_por_materia.get(key)< min){
-//									min = cant_alumnos_por_materia.get(key);
-//									codigo_min = key;
-//								}//if
-//							}//for
-//							solution.getDecisionVariables()[i].setValue(codigo_min);
-//						}// if de seleccion de objetivo
-//						
+						else{
+							HashMap<Integer,Integer> cant_alumnos_por_materia = new HashMap<Integer,Integer>();
+							int codigo_materia;
+							for (int iterator=0; iterator< solution.getDecisionVariables().length; iterator++){
+								codigo_materia = (int)solution.getDecisionVariables()[iterator].getValue();
+								if(codigo_materia!=0){
+									if(cant_alumnos_por_materia.get(codigo_materia)==null)
+										cant_alumnos_por_materia.put(codigo_materia, 1);
+									else
+										cant_alumnos_por_materia.put(codigo_materia, cant_alumnos_por_materia.get(codigo_materia)+1);	
+								}
+							}// for
+							
+							int [] signatureCodes = ((SignatureAssignment)solution.getProblem()).getSignatureCodes_();
+							int codigo_min = 0;
+							int min = 100000;
+							for( int key : signatureCodes){
+								if(cant_alumnos_por_materia.get(key)== null){
+									codigo_min = key;
+									break;
+								}
+								else if(cant_alumnos_por_materia.get(key)< min){
+									min = cant_alumnos_por_materia.get(key);
+									codigo_min = key;
+								}//if
+							}//for
+							solution.getDecisionVariables()[i].setValue(codigo_min);
+						}// if de seleccion de objetivo
+						
 						
 					} // if
 			} // else

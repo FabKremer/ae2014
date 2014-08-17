@@ -103,7 +103,7 @@ public class NSGAII_main {
       //problem = new Kursawe("Real", 3);
       //problem = new Kursawe("BinaryReal", 3);
 //      problem = new Water("Real");
-      problem = new SignatureAssignment("SignatureInt", 4000); //100 alumnos y 4 materias por alumno
+      problem = new SignatureAssignment("SignatureInt", 2400); //600 alumnos y 4 materias por alumno
 //      problem = new ZDT3("ArrayReal", 4);
 
       //problem = new ConstrEx("Real");
@@ -116,7 +116,7 @@ public class NSGAII_main {
 
     // Algorithm parameters
     algorithm.setInputParameter("populationSize",100);
-    algorithm.setInputParameter("maxEvaluations",3000);//25000
+    algorithm.setInputParameter("maxEvaluations",25000);//25000
 
     // Mutation and Crossover for Real codification 
     parameters = new HashMap() ;
