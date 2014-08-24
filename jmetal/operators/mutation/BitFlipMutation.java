@@ -116,11 +116,11 @@ public class BitFlipMutation extends Mutation {
 								//encuentro alguna materia que tenga mejor preferencia
 								double preferencia_materia = materias_probabilidades.get(materia)[alumno];
 								double preferencia_nueva = -1;
-								if (preferencia_materia==0.4){
+								if (preferencia_materia<0.7){
 									int[] signatureCodes = ((SignatureAssignment)solution.getProblem()).getSignatureCodes_();
 									int aux;
 									
-									int no_mueras = signatureCodes.length * 1000;
+									int no_mueras = signatureCodes.length * 100;
 									//la cambio por una mas alta si puedo, si no igual
 									while(preferencia_nueva<=preferencia_materia && no_mueras>0){
 										aux = PseudoRandom.randInt(0,signatureCodes.length-1);
@@ -140,18 +140,6 @@ public class BitFlipMutation extends Mutation {
 											if ((random_signature != materia) && (!Arrays.asList(codigos_alumno).contains(mat))){
 												preferencia_nueva = materias_probabilidades.get(random_signature)[alumno];
 											}
-										}
-									}
-								}else if (preferencia_materia==0.1){
-									int[] signatureCodes = ((SignatureAssignment)solution.getProblem()).getSignatureCodes_();
-									int aux;
-									//la cambio por una mas alta seguro!!
-									while(preferencia_nueva<=preferencia_materia){
-										aux = PseudoRandom.randInt(0,signatureCodes.length-1);
-										random_signature = signatureCodes[aux];
-										int mat = random_signature;
-										if ((random_signature != materia) && (!Arrays.asList(codigos_alumno).contains(mat))){
-											preferencia_nueva = materias_probabilidades.get(random_signature)[alumno];
 										}
 									}
 								}

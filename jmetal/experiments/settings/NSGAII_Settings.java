@@ -24,6 +24,8 @@ package jmetal.experiments.settings;
 import jmetal.core.Algorithm;
 import jmetal.experiments.Settings;
 import jmetal.metaheuristics.nsgaII.NSGAII;
+import jmetal.operators.corrective.Corrective;
+import jmetal.operators.corrective.CorrectiveFactory;
 import jmetal.operators.crossover.Crossover;
 import jmetal.operators.crossover.CrossoverFactory;
 import jmetal.operators.mutation.Mutation;
@@ -31,6 +33,7 @@ import jmetal.operators.mutation.MutationFactory;
 import jmetal.operators.selection.Selection;
 import jmetal.operators.selection.SelectionFactory;
 import jmetal.problems.ProblemFactory;
+import jmetal.problems.SignatureAssignment;
 import jmetal.util.JMException;
 
 import java.util.HashMap;
@@ -45,6 +48,7 @@ public class NSGAII_Settings extends Settings {
   public double mutationProbability_         ;
   public double crossoverProbability_        ;
   public double mutationDistributionIndex_   ;
+  public double correctiveProbability_   ;
   public double crossoverDistributionIndex_  ;
 
   /**
@@ -53,18 +57,13 @@ public class NSGAII_Settings extends Settings {
   public NSGAII_Settings(String problem) {
     super(problem) ;
 
-    Object [] problemParams = {"Real"};
-    try {
-	    problem_ = (new ProblemFactory()).getProblem(problemName_, problemParams);
-    } catch (JMException e) {
-	    // TODO Auto-generated catch block
-	    e.printStackTrace();
-    }
+    problem_ = new SignatureAssignment("SignatureInt", 2400);
     // Default experiments.settings
-    populationSize_              = 100   ;
+    populationSize_              = 60   ;
     maxEvaluations_              = 25000 ;
-    mutationProbability_         = 1.0/problem_.getNumberOfVariables() ;
-    crossoverProbability_        = 0.9   ;
+    mutationProbability_         = 0.05;//1.0/problem_.getNumberOfVariables() ;
+    crossoverProbability_        = 0.5   ;
+    correctiveProbability_        = 1.0   ;
     mutationDistributionIndex_   = 20.0  ;
     crossoverDistributionIndex_  = 20.0  ;
   } // NSGAII_Settings
@@ -79,6 +78,7 @@ public class NSGAII_Settings extends Settings {
     Algorithm algorithm ;
     Selection  selection ;
     Crossover  crossover ;
+    Corrective  corrective ;
     Mutation   mutation  ;
 
     HashMap  parameters ; // Operator parameters
@@ -92,25 +92,31 @@ public class NSGAII_Settings extends Settings {
     algorithm.setInputParameter("populationSize",populationSize_);
     algorithm.setInputParameter("maxEvaluations",maxEvaluations_);
 
-    // Mutation and Crossover for Real codification
+ // Mutation and Crossover for Real codification 
     parameters = new HashMap() ;
     parameters.put("probability", crossoverProbability_) ;
-    parameters.put("distributionIndex", crossoverDistributionIndex_) ;
-    crossover = CrossoverFactory.getCrossoverOperator("SBXCrossover", parameters);
+//    parameters.put("distributionIndex", 20.0) ;
+    crossover = CrossoverFactory.getCrossoverOperator("SinglePointCrossover", parameters);                   
 
     parameters = new HashMap() ;
-    parameters.put("probability", mutationProbability_) ;
-    parameters.put("distributionIndex", mutationDistributionIndex_) ;
-    mutation = MutationFactory.getMutationOperator("PolynomialMutation", parameters);
-
-    // Selection Operator
+    parameters.put("probability", mutationProbability_) ; //1 / la cantidad de materias de cada alumno
+//    parameters.put("distributionIndex", 20.0) ;
+    mutation = MutationFactory.getMutationOperator("BitFlipMutation", parameters);     
+    
+    parameters = new HashMap() ;
+    parameters.put("probability",correctiveProbability_) ;
+//    parameters.put("distributionIndex", 20.0) ;
+    corrective = CorrectiveFactory.getCorrectiveOperator("SignatureCorrective", parameters); 
+    
+    // Selection Operator 
     parameters = null ;
-    selection = SelectionFactory.getSelectionOperator("BinaryTournament2", parameters) ;
-
+    selection = SelectionFactory.getSelectionOperator("BinaryTournament2", parameters) ;        
+    
     // Add the operators to the algorithm
     algorithm.addOperator("crossover",crossover);
     algorithm.addOperator("mutation",mutation);
     algorithm.addOperator("selection",selection);
+    algorithm.addOperator("corrective",corrective);
 
     return algorithm ;
   } // configure

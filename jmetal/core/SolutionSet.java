@@ -269,12 +269,32 @@ public class SolutionSet implements Serializable {
       if (size()>0) {
         int numberOfVariables = solutionsList_.get(0).getDecisionVariables().length ;
         for (Solution aSolutionsList_ : solutionsList_) {
+        	int cantidad_punto_unos = 0;
+		    HashMap<Integer,double[]> materias_probabilidades = ((SignatureAssignment)aSolutionsList_.getProblem()).getMateria_probabilidades();
+
           for (int j = 0; j < numberOfVariables; j++){
             bw.write(aSolutionsList_.getDecisionVariables()[j].toString() + " ");
           	if (((j+1) % (numberOfVariables/4)) == 0){
           		bw.newLine();
           	}
+		    try {
+				if (aSolutionsList_.getDecisionVariables()[j].getValue() != 0){
+					int materia =(int) aSolutionsList_.getDecisionVariables()[j].getValue();
+					 if (materias_probabilidades.get(materia)[j%(numberOfVariables/4)] == 0.1)
+					    	cantidad_punto_unos++;
+				}
+			} catch (NumberFormatException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JMException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		   
           }
+          bw.newLine();
+          bw.newLine();
+          bw.write("vapai  " +Integer.toString(cantidad_punto_unos));
+          bw.newLine();
           bw.newLine();
         }
       }

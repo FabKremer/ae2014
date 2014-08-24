@@ -49,6 +49,7 @@ public class SignatureCorrective extends Corrective{
 			int cantidad_alumnos = solution.getDecisionVariables().length/4;
 		    HashMap<Integer,Integer> materia_creditos = ((SignatureAssignment)solution.getProblem()).getMateria_creditos();
 		    HashMap<Integer,Integer> alumno_creditos = ((SignatureAssignment)solution.getProblem()).getAlumno_creditos(); 
+		    HashMap<Integer,double[]> materias_probabilidades = ((SignatureAssignment)solution.getProblem()).getMateria_probabilidades();
 
 			for (int i = 0; i < cantidad_alumnos ; i++){     				
 				// recorro la solucion para obtener los codigos de materias asignadas hata el momento
@@ -61,7 +62,6 @@ public class SignatureCorrective extends Corrective{
 					codigos_alumno[j] = solution.getDecisionVariables()[i+(cantidad_alumnos*j)].getValue();  
 				}
 				
-				
 				for (int j=0; j<4; j++){
 					if (codigos_alumno[j]!=0){
 						double[] codigos_alumno_sin_j = new double[3];
@@ -72,16 +72,50 @@ public class SignatureCorrective extends Corrective{
 								zero_to_three++;
 							}    							
 						}
-						
-						double codigo_iterator = codigos_alumno[j];
-						while (este(codigos_alumno_sin_j,codigo_iterator)){
-							int[] signatureCodes = ((SignatureAssignment)solution.getProblem()).getSignatureCodes_();
-							int aux = PseudoRandom.randInt(0,signatureCodes.length-1);
-							int random_signature = signatureCodes[aux];
-							codigo_iterator = random_signature;
+						int random_signature = (int)codigos_alumno[j];
+						int[] signatureCodes = ((SignatureAssignment)solution.getProblem()).getSignatureCodes_();
+						double preferencia_nueva = -1;
+						double preferencia_materia = materias_probabilidades.get(random_signature)[i];
+//						while (este(codigos_alumno_sin_j,random_signature)){
+//							no_muero = signatureCodes.length * 100;
+//							int aux = PseudoRandom.randInt(0,signatureCodes.length-1);
+//							random_signature = signatureCodes[aux];
+//							preferencia_nueva = materias_probabilidades.get(random_signature)[i];
+//							while(preferencia_nueva<=preferencia_materia && no_muero>0){
+//								aux = PseudoRandom.randInt(0,signatureCodes.length-1);
+//								random_signature = signatureCodes[aux];
+//								preferencia_nueva = materias_probabilidades.get(random_signature)[i];
+//								no_muero--;
+//							}
+//							if(no_muero==0 || este(codigos_alumno_sin_j,random_signature)){
+//								no_muero = signatureCodes.length * 100;
+//								while(preferencia_nueva<preferencia_materia && no_muero>0){
+//									aux = PseudoRandom.randInt(0,signatureCodes.length-1);
+//									random_signature = signatureCodes[aux];
+//									preferencia_nueva = materias_probabilidades.get(random_signature)[i];
+//									no_muero--;
+//								}
+//								if(no_muero==0 || este(codigos_alumno_sin_j,random_signature)){
+//									aux = PseudoRandom.randInt(0,signatureCodes.length-1);
+//									random_signature = signatureCodes[aux];
+//								}
+//							}
+//							
+//						}
+						int no_muero = signatureCodes.length * 100;
+						if (este(codigos_alumno_sin_j,random_signature)){
+							while(preferencia_nueva<=preferencia_materia && no_muero>0){
+								while(este(codigos_alumno_sin_j,random_signature)){
+									int aux = PseudoRandom.randInt(0,signatureCodes.length-1);
+									random_signature = signatureCodes[aux];
+									preferencia_nueva = materias_probabilidades.get(random_signature)[i];
+								}
+								no_muero--;
+							}
 						}
-						codigos_alumno[j] = codigo_iterator;
-						solution.getDecisionVariables()[i+(cantidad_alumnos*j)].setValue(codigo_iterator);
+	
+						codigos_alumno[j] = random_signature;
+						solution.getDecisionVariables()[i+(cantidad_alumnos*j)].setValue(random_signature);
 					}    					 
 				}  
 				

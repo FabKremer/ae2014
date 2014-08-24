@@ -62,12 +62,17 @@ public class Main {
     Settings settings = null;
 
     String algorithmName   = "" ;
-    String problemName     = "Kursawe" ; // Default problem
+    String problemName     = "SignatureAssignment" ; // Chupala puto problem
     String paretoFrontFile = "" ;
 
     indicators = null ;
     problem = null ;
-
+    args = new String[3];
+    
+    args[0] = "NSGAII";
+    args[1] = "SignatureAssignment";
+    args[2] = "./FUN";
+    
     if (args.length == 0) { //
       System.err.println("Sintax error. Usage:") ;
       System.err.println("a) jmetal.experiments.Main algorithmName ") ;
@@ -100,37 +105,40 @@ public class Main {
     logger_.addHandler(fileHandler_) ;
 
     algorithm = settings.configure();
-
     if (args.length == 3) {
     	Problem p = algorithm.getProblem() ;
-      indicators = new QualityIndicator(p, paretoFrontFile);
+    	indicators = new QualityIndicator(p, paretoFrontFile);
     }
     
     // Execute the Algorithm
-    long initTime = System.currentTimeMillis();
-    SolutionSet population = algorithm.execute();
-    long estimatedTime = System.currentTimeMillis() - initTime;
+    for(int i=0; i<30; i++){
+    	long initTime = System.currentTimeMillis();
+        SolutionSet population = algorithm.execute();
+        long estimatedTime = System.currentTimeMillis() - initTime;
 
-    // Result messages
-    logger_.info("Total execution time: "+estimatedTime + "ms");
-    logger_.info("Objectives values have been writen to file FUN");
-    population.printObjectivesToFile("FUN");
-    logger_.info("Variables values have been writen to file VAR");
-    population.printVariablesToFile("VAR");
+        // Result messages
+        logger_.info("Total execution time: "+estimatedTime + "ms");
+//        logger_.info("Objectives values have been writen to file FUN");
+        population.printObjectivesToFile("FUN");
+//        logger_.info("Variables values have been writen to file VAR");
+        population.printVariablesToFile("VAR");
 
-    if (indicators != null) {
-      logger_.info("Quality indicators") ;
-      logger_.info("Hypervolume: " + indicators.getHypervolume(population)) ;
-      logger_.info("GD         : " + indicators.getGD(population)) ;
-      logger_.info("IGD        : " + indicators.getIGD(population)) ;
-      logger_.info("Spread     : " + indicators.getSpread(population)) ;
-      logger_.info("Epsilon    : " + indicators.getEpsilon(population)) ;
+        if (indicators != null) {
+          logger_.info("Quality indicators") ;
+          logger_.info("Hypervolume: " + indicators.getHypervolume(population)) ;
+          logger_.info("GD         : " + indicators.getGD(population)) ;
+          logger_.info("IGD        : " + indicators.getIGD(population)) ;
+          logger_.info("Spread     : " + indicators.getSpread(population)) ;
+          logger_.info("Epsilon    : " + indicators.getEpsilon(population)) ;
 
-      if (algorithm.getOutputParameter("evaluations") != null) {
-        Integer evals = (Integer)algorithm.getOutputParameter("evaluations") ;
-        int evaluations = (Integer)evals.intValue();
-        logger_.info("Speed      : " + evaluations + " evaluations") ;
-      } // if
-    } // if
+          if (algorithm.getOutputParameter("evaluations") != null) {
+            Integer evals = (Integer)algorithm.getOutputParameter("evaluations") ;
+            int evaluations = (Integer)evals.intValue();
+            logger_.info("Speed      : " + evaluations + " evaluations") ;
+            logger_.info("");
+          } // if
+        } // if
+    }
+    
   } //main
 } // Main

@@ -99,7 +99,6 @@ public class NSGAII extends Algorithm {
       problem_.evaluateConstraints(newSolution);
       evaluations++;
       population.add(newSolution);
-      System.out.println(i);
     } //for     
 
     // Generations 
@@ -125,7 +124,6 @@ public class NSGAII extends Algorithm {
           offspringPopulation.add(offSpring[1]);
           evaluations += 2;
         } // if   
-        System.out.println(evaluations);
       } // for
       
       // Create the solutionSet union of solutionSet and offSpring

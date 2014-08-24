@@ -125,7 +125,7 @@ public class NSGAII_main {
     crossover = CrossoverFactory.getCrossoverOperator("SinglePointCrossover", parameters);                   
 
     parameters = new HashMap() ;
-    parameters.put("probability", 0.1) ; //1 / la cantidad de materias de cada alumno
+    parameters.put("probability", 0.25) ; //1 / la cantidad de materias de cada alumno
 //    parameters.put("distributionIndex", 20.0) ;
     mutation = MutationFactory.getMutationOperator("BitFlipMutation", parameters);     
     
@@ -141,7 +141,6 @@ public class NSGAII_main {
     // Add the operators to the algorithm
     algorithm.addOperator("crossover",crossover);
     algorithm.addOperator("mutation",mutation);
-    
     algorithm.addOperator("corrective",corrective);
     algorithm.addOperator("selection",selection);
 

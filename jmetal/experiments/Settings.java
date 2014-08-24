@@ -26,6 +26,7 @@ import jmetal.core.Operator;
 import jmetal.core.Problem;
 import jmetal.encodings.solutionType.ArrayRealSolutionType;
 import jmetal.encodings.solutionType.BinaryRealSolutionType;
+import jmetal.encodings.solutionType.SignatureIntSolutionType;
 import jmetal.encodings.solutionType.BinarySolutionType;
 import jmetal.encodings.solutionType.RealSolutionType;
 import jmetal.operators.crossover.Crossover;

@@ -189,8 +189,8 @@ public class SignatureAssignment extends Problem {
 	}
 	
 	// SignatrueAssignment is a maximization problem: make the inverse to minimize
-    solution.setObjective(0,1.0/f[0]);
-    solution.setObjective(1,1.0/f[1]);
+    solution.setObjective(0,1000.0/f[0]);
+    solution.setObjective(1,1000.0/f[1]);
     
   } // evaluate
 

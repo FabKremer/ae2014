@@ -224,7 +224,7 @@ public abstract class Experiment {
   } // checkDirectories
 
   /**
-   * Especifies the experiments.settings of each algorith. This method is checked in each
+   * Especifies the experiments.settings of each algorithm. This method is checked in each
    * experiment run
    *
    * @param problemName   Problem to solve
